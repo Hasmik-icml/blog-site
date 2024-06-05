@@ -18,17 +18,19 @@ services:
       - ./backend:/app
       # - /app/node_modules
 
-  # frontend:
-  #   restart: always
-  #   container_name: blogsite-front
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile.frontend
-  #   ports:
-  #     - "8080:80"
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
+  frontend:
+    restart: always
+    container_name: blogsite-front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    # env_file:
+    #   - ./frontend/.env
+    volumes:
+      - ./frontend/public:/usr/share/nginx/html
+      # - /app/node_modules
 
   db:
     image: postgres:13
