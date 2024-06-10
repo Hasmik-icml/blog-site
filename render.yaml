@@ -3,34 +3,26 @@ services:
     name: backend
     env: docker
     plan: free
-    buildCommand: docker-compose -f docker-compose.yml build backend
-    startCommand: docker-compose -f docker-compose.yml up backend
     repo: https://github.com/Hasmik-icml/blog-site
     branch: master
+    dockerfilePath: ./backend/Dockerfile
+    buildCommand: docker-compose -f docker-compose.yml build backend
+    startCommand: docker-compose -f docker-compose.yml up backend
     envVars:
       - key: DATABASE_URL
         fromGroup: blogsite-env
-      - key: POSTGRES_USER
-        fromGroup: blogsite-env
-      - key: POSTGRES_PASSWORD
-        fromGroup: blogsite-env
-      - key: POSTGRES_DB
-        fromGroup: blogsite-env
-    mounts:
-      - type: volume
-        name: pg_data
-        mountPath: /var/lib/postgresql/data
 
   - type: web
     name: frontend
     env: docker
     plan: free
-    buildCommand: docker-compose -f docker-compose.yml build frontend
-    startCommand: docker-compose -f docker-compose.yml up frontend
     repo: https://github.com/Hasmik-icml/blog-site
     branch: master
+    dockerfilePath: ./frontend/Dockerfile
+    buildCommand: docker-compose -f docker-compose.yml build frontend
+    startCommand: docker-compose -f docker-compose.yml up frontend
 
-  - type: private-service
+  - type: database
     name: db
     env: docker
     plan: free
