@@ -1,33 +1,16 @@
 services:
   - type: web
-    name: backend
+    name: blogsite
     env: docker
     plan: free
     repo: https://github.com/Hasmik-icml/blog-site
     branch: master
-    dockerfilePath: ./backend/Dockerfile
-    buildCommand: docker-compose -f docker-compose.yml build backend
-    startCommand: docker-compose -f docker-compose.yml up backend
+    dockerfilePath: ./Dockerfile
+    buildCommand: docker-compose -f docker-compose.yml build
+    startCommand: docker-compose -f docker-compose.yml up
     envVars:
       - key: DATABASE_URL
         fromGroup: blogsite-env
-
-  - type: web
-    name: frontend
-    env: docker
-    plan: free
-    repo: https://github.com/Hasmik-icml/blog-site
-    branch: master
-    dockerfilePath: ./frontend/Dockerfile
-    buildCommand: docker-compose -f docker-compose.yml build frontend
-    startCommand: docker-compose -f docker-compose.yml up frontend
-
-  - type: database
-    name: db
-    env: docker
-    plan: free
-    image: postgres:13
-    envVars:
       - key: POSTGRES_USER
         fromGroup: blogsite-env
       - key: POSTGRES_PASSWORD
