@@ -1,7 +1,7 @@
 services:
   - type: web
     name: blogsite
-    runtime: docker
+    env: docker
     plan: free
     repo: https://github.com/Hasmik-icml/blog-site
     branch: master
