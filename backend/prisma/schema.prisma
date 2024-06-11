@@ -18,6 +18,7 @@ model MenuSubMenu {
   id        Int       @id @default(autoincrement())
   name      String    @unique
   type      String
+  order     Int       @default(0)
   status    Boolean?  @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
