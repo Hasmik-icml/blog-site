@@ -7,7 +7,7 @@ const router: Router = Router();
 
 router.use('/menu-submenu', menuRouter);
 router.use('/auth', authRouter);
-router.use('/blog', blogRouter);
+// router.use('/blog', blogRouter);
 
 
 export { router as router };
