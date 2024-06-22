@@ -15,13 +15,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  blogs     Blog[]
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  name         String?
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  blogs        Blog[]
 }
 
 model Blog {
