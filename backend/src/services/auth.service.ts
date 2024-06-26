@@ -112,7 +112,6 @@ export class AuthService {
             return { accessToken, refreshToken: newRefreshToken };
         } catch (error) {
             console.log(error);
-
         }
     }
 

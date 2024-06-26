@@ -66,7 +66,7 @@ export class MenuSubMenuService {
             if (!existingMenuSubMenu) {
                 return null;
             }
-            console.log('existingMenuSubMenu', existingMenuSubMenu);
+            
             const deleted = await menuRepo.update({
                 where: { id },
                 data: { deletedAt: new Date() },
