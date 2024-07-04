@@ -7,7 +7,7 @@ import { validateRequest } from "./error.handler";
 const router: Router = Router();
 
 router
-    .post("/blogs",
+    .post("/create",
         [
             body('title').notEmpty().isString().trim().escape().withMessage("Title required and must be a string"),
             body('content').notEmpty().isString().trim().escape().withMessage("Content required and must be a string"),
@@ -20,9 +20,9 @@ router
         validateRequest,
         authMiddleware,
         BlogController.createBlog)
-    .get("/blogs", BlogController.getAllBlogs)
-    .get("/blogs/:id", BlogController.getBlogById)
-    .put("/blog/:id",
+    .get("/all-blogs", BlogController.getAllBlogs)
+    .get("/:id", BlogController.getBlogById)
+    .put("/:id",
         [
             body('title').optional().isString().trim().escape(),
             body('content').optional().isString().trim().escape(),
