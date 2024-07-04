@@ -35,6 +35,6 @@ router
         validateRequest,
         authMiddleware,
         BlogController.updateBlog)
-    .delete("/blogs/:id", BlogController.deleteBlog)
+    .delete("/:id", BlogController.deleteBlog)
 
 export { router as blogRouter };
