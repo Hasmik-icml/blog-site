@@ -3,11 +3,11 @@ import { BlogService } from "../services/blog.service";
 
 export class BlogController {
     public static async createBlog(req: Request, res: Response): Promise<void> {
-        const { title, content, image, tags } = req.body;
+        const { title, content, image, tags, categoryId } = req.body;
         const userId = (req as any).userId;
 
         try {
-            const newBlog = await BlogService.createBlog(title, content, userId, image, tags);
+            const newBlog = await BlogService.createBlog(title, content, userId, image, tags, categoryId);
             res.status(200).send(newBlog);
         } catch (error) {
             res.status(500).json({ error: 'Error creating blog' });
@@ -36,11 +36,10 @@ export class BlogController {
 
     public static async updateBlog(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        const { title, content, image, tags } = req.body;
+        const { title, content, image, tags, categoryId } = req.body;
         // const userId = (req as any).userId;
         try {
-            console.log(222, { title, content, image, tags } )
-            const newBlog = await BlogService.updateBlog(parseInt(id), title, content, image, tags);
+            const newBlog = await BlogService.updateBlog(parseInt(id), title, content, image, tags, categoryId);
             res.status(200).send(newBlog);
         } catch (error) {
             res.status(500).json({ error: 'Error updating blog' });

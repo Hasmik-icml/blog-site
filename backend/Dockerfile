@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 RUN npm install prisma
 
@@ -16,5 +16,6 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["bash", "-c", "npm run migrate && npm run start"] 
+CMD ["sh", "-c", "npm run migrate && npm run start"] 
+
 

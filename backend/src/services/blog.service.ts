@@ -7,9 +7,17 @@ export class BlogService {
         return this.prismaClient.blog;
     }
 
-    public static async createBlog(title: string, content: string, userId: string, image: string, tags: string[]): Promise<Blog> {
+    public static async createBlog(title: string, content: string, userId: string, image: string, tags: string[], categoryId: number): Promise<Blog> {
         return await this.repo.create({
-            data: { title, content, authorId: userId, image, tags },
+            data: {
+                title, content, authorId: userId, image, tags,
+                categories: {
+                    connect: { id: Number(categoryId) }
+                },
+            },
+            include: {
+                categories: true,
+            }
         });
     }
 
@@ -23,13 +31,25 @@ export class BlogService {
         });
     }
 
-    public static async updateBlog(id: number, title?: string, content?: string, image?: string, tag?: string[]): Promise<Blog | null> {
-        const data = { title, content, image, tag };
-        console.log(111, data);
-        return await this.repo.update({
-            where: { id },
-            data,
-        });
+    public static async updateBlog(id: number, title?: string, content?: string, image?: string, tag?: string[], categoryId?: number): Promise<Blog | null | undefined> {
+        try {
+            const data = {
+                title, content, image, tag,
+                categories: {
+                    connect: { id: categoryId },
+                },
+                include: {
+                    categories: true,
+                }
+            };
+            console.log(111, data);
+            return await this.repo.update({
+                where: { id },
+                data,
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     public static async deleteBlog(id: number): Promise<Blog | null> {

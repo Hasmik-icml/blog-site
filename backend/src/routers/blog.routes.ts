@@ -15,7 +15,8 @@ router
             body('tags').isArray({ min: 1 }).withMessage('Tags must be an array with at least one element')
                 .custom((tags) => {
                     return tags.every((tag: any) => typeof tag === 'string');
-                }).withMessage('Each tag must be a string')
+                }).withMessage('Each tag must be a string'),
+            body('categoryId').notEmpty().isInt().withMessage('Category must be a valid integer')
         ],
         validateRequest,
         authMiddleware,
@@ -30,7 +31,8 @@ router
             body('tags').optional().isArray({ min: 1 }).withMessage('Tags must be an array with at least one element')
                 .custom((tags) => {
                     return tags.every((tag: any) => typeof tag === 'string');
-                }).withMessage('Each tag must be a string')
+                }).withMessage('Each tag must be a string'),
+            body('categoryId').notEmpty().isInt().withMessage('Category must be a valid integer')
         ],
         validateRequest,
         authMiddleware,
