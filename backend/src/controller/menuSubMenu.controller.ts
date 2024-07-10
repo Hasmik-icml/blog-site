@@ -1,14 +1,13 @@
 import { Response, Request } from "express";
 import { MenuSubMenuService } from "../services/menuSubMenu.service";
-import { MenuSubMenu } from "@prisma/client";
+import { Menu, SubMenu } from "@prisma/client";
 
 export class MenuSubMenuController {
     public static async create(req: Request, res: Response): Promise<void> {
         const type = req.params.infotype;
-        const { name, status } = req.body;
-        console.log("1111", type, name,)
+        const { name, url, order, show, menuId } = req.body;
         try {
-            const result: MenuSubMenu = await MenuSubMenuService.create(name, type);
+            const result: Menu | SubMenu = await MenuSubMenuService.create(name, url, order, show, menuId, type);
             res.status(200).send(result);
         } catch (errror) {
             console.log(errror);
@@ -20,7 +19,6 @@ export class MenuSubMenuController {
         try {
             const type = req.params.infotype;
             const [data, count] = await MenuSubMenuService.FindAllMenusAndSubmenus(type);
-            console.log(222, data, count);
            
             res.status(200).send({ data, count });
         } catch (errror) {
@@ -31,10 +29,11 @@ export class MenuSubMenuController {
 
     public static async updateMenuSubMenu(req: Request, res: Response): Promise<void> {
         const id = parseInt(req.params.id, 10);
+        const type = req.params.infotype;
         const data = req.body;
 
         try {
-            const updatedMenuSubMenu = await MenuSubMenuService.updateMenuSubMenu(id, data);
+            const updatedMenuSubMenu = await MenuSubMenuService.updateMenuSubMenu(id, type, data);
             res.status(200).send(updatedMenuSubMenu);
         } catch (error) {
             console.error('Error updating menu/submenu:', error);
@@ -44,9 +43,10 @@ export class MenuSubMenuController {
 
     public static async deleteMenuSubMenu(req: Request, res: Response): Promise<void> {
         const id = parseInt(req.params.id, 10);
+        const type = req.params.infotype;
 
         try {
-            const deletedMenuSubMenu = await MenuSubMenuService.deleteMenuSubMenu(id);
+            const deletedMenuSubMenu = await MenuSubMenuService.deleteMenuSubMenu(id, type);
 
             if (!deletedMenuSubMenu) {
                 res.status(404).send('Menu/Submenu not found');

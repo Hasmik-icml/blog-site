@@ -37,22 +37,38 @@ model Blog {
   deletedAt DateTime?
 
   author     User       @relation(fields: [authorId], references: [id])
-  categories Category[] 
+  categories Category[]
 }
 
 model Category {
-  id         Int        @id @default(autoincrement())
-  name       String
-  blogs      Blog[]     
+  id    Int    @id @default(autoincrement())
+  name  String
+  blogs Blog[]
 }
 
-model MenuSubMenu {
+model Menu {
   id        Int       @id @default(autoincrement())
   name      String    @unique
-  type      String
+  url       String
   order     Int       @default(0)
-  status    Boolean?  @default(true)
+  show      Boolean?  @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  subMenus SubMenu[]
+}
+
+model SubMenu {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  url       String
+  order     Int       @default(0)
+  show      Boolean?  @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  menuId Int
+  menu   Menu @relation(fields: [menuId], references: [id])
 }
