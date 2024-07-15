@@ -32,7 +32,7 @@ router
                 .custom((tags) => {
                     return tags.every((tag: any) => typeof tag === 'string');
                 }).withMessage('Each tag must be a string'),
-            body('categoryId').notEmpty().isInt().withMessage('Category must be a valid integer')
+            body('categoryId').optional().isInt().withMessage('Category must be a valid integer')
         ],
         validateRequest,
         authMiddleware,
