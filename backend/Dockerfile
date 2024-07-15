@@ -3,10 +3,12 @@ FROM node:16.13
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm ci
+#RUN npm install
 
-RUN npm install prisma
+RUN npm install -g prisma
+
+#RUN npm install -g typescript ts-node
 
 COPY prisma/ ./prisma
 
