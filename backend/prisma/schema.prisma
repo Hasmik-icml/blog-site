@@ -41,8 +41,10 @@ model Blog {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
+  id        Int       @id @default(autoincrement())
+  name      String
+  deletedAt DateTime?
+
   blogs Blog[]
 }
 
