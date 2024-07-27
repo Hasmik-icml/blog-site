@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { BlogService } from "../services/blog.service";
+import getOrderParams from './../helpers/order-params.helper';
+import getFilterParams from "../helpers/filters-params.helper";
 
 export class BlogController {
     public static async createBlog(req: Request, res: Response): Promise<void> {
-        const { title, content, image, tags, categoryId } = req.body;
+        const { title, content, image, tags, category } = req.body;
         const userId = (req as any).userId;
 
         try {
-            const newBlog = await BlogService.createBlog(title, content, userId, image, tags, categoryId);
+            const newBlog = await BlogService.createBlog(title, content, userId, image, tags, category);
             res.status(200).send(newBlog);
         } catch (error) {
             res.status(500).json({ error: 'Error creating blog' });
@@ -16,8 +18,14 @@ export class BlogController {
 
     public static async getAllBlogs(req: Request, res: Response): Promise<void> {
         try {
-            const allBlogs = await BlogService.getAllBlogs();
-            res.status(200).send(allBlogs);
+            const page = parseInt(req.query.page as string, 10) || 1;
+            const limit = parseInt(req.query.limit as string, 10) || 10;
+
+            const { orderField, order } = getOrderParams(req);
+            const filters = getFilterParams(req);
+
+            const [data, count] = await BlogService.getAllBlogs(page, limit, orderField, order, filters);
+            res.status(200).send({ data, count });
         } catch (error) {
             res.status(500).json({ error: 'Error fetching blogs' });
 
@@ -28,7 +36,7 @@ export class BlogController {
         const blogId = Number(req.params.id);
         try {
             const blog = await BlogService.getBlogById(blogId);
-            res.status(200).send(blog);
+            res.status(200).send(blog || {});
         } catch (error) {
 
         }
@@ -36,10 +44,9 @@ export class BlogController {
 
     public static async updateBlog(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        const { title, content, image, tags, categoryId } = req.body;
-        // const userId = (req as any).userId;
+        const { title, content, image, tags, category } = req.body;
         try {
-            const newBlog = await BlogService.updateBlog(parseInt(id), title, content, image, tags, categoryId);
+            const newBlog = await BlogService.updateBlog(parseInt(id), title, content, image, tags, category);
             res.status(200).send(newBlog);
         } catch (error) {
             res.status(500).json({ error: 'Error updating blog' });
