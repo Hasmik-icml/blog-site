@@ -9,7 +9,7 @@ router
         [
             param("infotype").isString().isIn(["menu", "subMenu"]).withMessage("Invalid infotype"),
             body('name').trim().escape().isString().notEmpty().withMessage("Please provide a name for the menu/submenu"),
-            body('url').trim().escape().isString().notEmpty().withMessage("URL should be a string"),
+            body('url').trim().isString().notEmpty().isURL().withMessage("URL should be a string"),
             body('order').optional().isInt().withMessage("Order should be an integer"),
             body('show').optional().isBoolean().withMessage("Show should be a boolean"),
             body('menuId')
@@ -31,7 +31,7 @@ router
         [
             param("infotype").isString().isIn(["menu", "subMenu"]).withMessage("Invalid infotype"),
             body('name').optional().trim().escape().isString().withMessage("Please provide a name for the menu/submenu"),
-            body('url').optional().trim().escape().isString().withMessage("URL should be a string"),
+            body('url').optional().trim().isString().isURL().withMessage("URL should be a string"),
             body('order').optional().isInt().withMessage("Order should be an integer"),
             body('show').optional().isBoolean().withMessage("Show should be a boolean"),
             body('menuId')
