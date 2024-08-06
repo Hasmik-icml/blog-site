@@ -25,7 +25,7 @@ export class AuthService {
     }
 
     public static async signUp(userName: string, password: string, email: string): Promise<IUser | undefined | Error> {
-        try {
+        // try {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
             const selectFields = { "id": true, "email": true, "name": true };
@@ -43,10 +43,10 @@ export class AuthService {
                 select: selectFields,
             });
             return userCreated;
-        } catch (error) {
-            console.log(555, error)
-            return new BadRequestError("User already exists");
-        }
+        // } catch (error) {
+        //     console.log(555, error)
+        //     return new BadRequestError("User already exists");
+        // }
     }
 
     public static async signIn(email: string, password: string): Promise<ITokens | undefined> {

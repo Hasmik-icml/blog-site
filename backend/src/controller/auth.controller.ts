@@ -1,15 +1,21 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
+import { CustomError } from "../errors/custom.error";
 
 export class AuthController {
     public static async signUp(req: Request, res: Response): Promise<void> {
         const { userName, email, password } = req.body
         try {
             const result = await AuthService.signUp(userName, password, email);
+            console.log(111, result)
             res.status(201).send(result);
         } catch (error) {
-            console.log(error);
-            res.status(400).send({ message: 'User already exists' });
+            if (error instanceof CustomError) {
+                console.log("serialaize", error.serializeErrors())
+                res.status(error.statusCode).send({ errors: error.serializeErrors() });
+            } else {
+                res.status(400).send({ message: 'Something went wrong' });
+            }
         }
     }
 
