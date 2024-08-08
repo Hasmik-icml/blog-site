@@ -31,7 +31,7 @@ router
     )
     .post('/signin',
         [
-            body('email').trim().escape().isEmail().withMessage("Invalid email"),
+            body('email').trim().escape().isEmail().withMessage("Invalid email or password"),
             body('password')
                 .trim()
                 .isLength({ min: 8 })
@@ -41,7 +41,7 @@ router
                     minUppercase: 1,
                     minNumbers: 1,
                     minSymbols: 0
-                }).withMessage("Invalide password"),
+                }).withMessage("Invalide password or password"),
         ],
         validateRequest,
         AuthController.signIn
