@@ -4,12 +4,8 @@ import { CustomError } from "../errors/custom.error";
 export class BadRequestError extends CustomError {
   statusCode = 400;
 
-  // constructor(public message: string) {
-  //   super(message);
-  //   Object.setPrototypeOf(this, BadRequestError.prototype);
-  // }
   constructor(public errors: ValidationError[] | string) {
-    super('Invalid request parameters');
+    super(typeof errors === 'string' ? errors : 'Invalid request parameters');
     Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 
@@ -17,7 +13,9 @@ export class BadRequestError extends CustomError {
     if (typeof this.errors === 'string') {
       return [{ message: this.errors }];
     } else {
-      return [{ message: this.errors[0].msg }];
-  }
+      return this.errors.map(err => {
+        return { message: err.msg, field: err.type === 'field' ? err.path : undefined };
+      });
+    }
   }
 }
