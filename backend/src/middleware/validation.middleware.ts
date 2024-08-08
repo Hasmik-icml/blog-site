@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import { Request, Response } from "express";
-import { BadRequestError } from "../handlers/badrequestError.handler";
+import { BadRequestError } from "../handlers/bad-request.handler";
 
 export function validateRequest(
   req: Request,

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateRequest } from "./error.handler";
+import { validateRequest } from "../middleware/validation.middleware";
 import { body } from "express-validator";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { BlogCategoriesController } from "../controller/blog-categories.controller";

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from "cors";
 import { router } from './routers/index';
 import cookieParser from 'cookie-parser';
-import { errorHandler } from './middleware/error-handler';
+import { errorHandler } from './middleware/error-handler.middleware';
 
 const app = express();
 const port = process.env.PORT || 3000;

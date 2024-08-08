@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { BadRequestError } from "../handlers/badrequestError.handler";
+import { BadRequestError } from "../handlers/bad-request.handler";
 import jwt from "jsonwebtoken";
 
 const secretKey = process.env.JWT_SECRET_KEY || "";

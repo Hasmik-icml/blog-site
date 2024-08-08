@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, query } from 'express-validator';
 import { BlogController } from "../controller/blog.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
-import { validateRequest } from "./error.handler";
+import { validateRequest } from "../middleware/validation.middleware";
 
 const router: Router = Router();
 
