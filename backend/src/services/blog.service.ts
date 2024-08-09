@@ -1,5 +1,6 @@
-import { Blog, Category, PrismaClient } from "@prisma/client";
+import { Blog, Category, Prisma, PrismaClient } from "@prisma/client";
 import { IBlogFilters } from "../helpers/filters-params.helper";
+import { NotFoundError } from "../handlers/not-found.handler";
 
 interface BlogUpdateData {
     title?: string;
@@ -52,6 +53,7 @@ export class BlogService {
             return blog;
         } catch (error) {
             console.log(error);
+            throw new Error("Someting went wrong");
         }
 
     }
@@ -134,12 +136,12 @@ export class BlogService {
             return [data, count];
         } catch (error) {
             console.log(error)
-            return [[], 0];
+            throw new Error("Error fetching blogs");
         }
     }
 
     public static async getBlogById(id: number): Promise<Blog | null> {
-        return await this.repo.findUnique({
+        return this.repo.findUnique({
             where: { id, deletedAt: null },
             include: {
                 categories: true
@@ -182,18 +184,20 @@ export class BlogService {
                 include: { categories: true }
             });
         } catch (error) {
-            console.log(error);
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+                throw new NotFoundError('Blog not found');
+            }
+            throw new Error('Error updating Blog');
         }
     }
 
     public static async deleteBlog(id: number): Promise<Blog | null> {
-        try {
             const existingBlog = await this.repo.findUnique({
                 where: { id },
             });
 
             if (!existingBlog) {
-                throw new Error("");
+                throw new NotFoundError("Blog not found");
             }
 
             const deletedBlog = await this.repo.update({
@@ -202,9 +206,5 @@ export class BlogService {
             });
 
             return deletedBlog;
-        } catch (error) {
-            throw new Error('Failed to delete');
-        }
     }
-
 }

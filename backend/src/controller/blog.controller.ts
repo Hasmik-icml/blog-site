@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { BlogService } from "../services/blog.service";
 import getOrderParams from './../helpers/order-params.helper';
 import getFilterParams from "../helpers/filters-params.helper";
+import { CustomError } from "../errors/custom.error";
 
 export class BlogController {
     public static async createBlog(req: Request, res: Response): Promise<void> {
@@ -49,7 +50,11 @@ export class BlogController {
             const newBlog = await BlogService.updateBlog(parseInt(id), title, content, image, tags, category);
             res.status(200).send(newBlog);
         } catch (error) {
-            res.status(500).json({ error: 'Error updating blog' });
+            if (error instanceof CustomError) {
+                res.status(error.statusCode).send({ errors: error.serializeErrors() });
+            } else {
+                res.status(400).send({ message: 'Something went wrong' });
+            }
         }
     }
 
@@ -59,7 +64,11 @@ export class BlogController {
             const deletedBlog = await BlogService.deleteBlog(parseInt(id));
             res.status(200).send(deletedBlog);
         } catch (error) {
-            res.status(500).json({ error: 'Error deleting blog' });
+            if (error instanceof CustomError) {
+                res.status(error.statusCode).send({ errors: error.serializeErrors() });
+            } else {
+                res.status(400).send({ message: 'Something went wrong' });
+            }
         }
     }
 }
