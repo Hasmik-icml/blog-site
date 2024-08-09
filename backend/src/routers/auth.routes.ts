@@ -34,14 +34,13 @@ router
             body('email').trim().escape().isEmail().withMessage("Invalid email or password"),
             body('password')
                 .trim()
-                .isLength({ min: 8 })
                 .isStrongPassword({
                     minLength: 8,
                     minLowercase: 1,
                     minUppercase: 1,
                     minNumbers: 1,
-                    minSymbols: 0
-                }).withMessage("Invalide password or password"),
+                    minSymbols: 1
+                }).withMessage("Invalide email or password"),
         ],
         validateRequest,
         AuthController.signIn

@@ -25,7 +25,6 @@ export class AuthService {
     }
 
     public static async signUp(userName: string, password: string, email: string): Promise<IUser | undefined | Error> {
-        // try {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
             const selectFields = { "id": true, "email": true, "name": true };
@@ -43,22 +42,17 @@ export class AuthService {
                 select: selectFields,
             });
             return userCreated;
-        // } catch (error) {
-        //     console.log(555, error)
-        //     return new BadRequestError("User already exists");
-        // }
     }
 
     public static async signIn(email: string, password: string): Promise<ITokens | undefined> {
-        try {
             const user = await this.repo.findUnique({ where: { email } });
             if (!user) {
-                throw Error("Invalid email or password");
+                throw new BadRequestError("Invalid email or password");
             }
 
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) {
-                throw Error("222Invalid email or password");
+                throw new BadRequestError("Invalid email or password");
             }
 
             const accessToken = jwt.sign(
@@ -78,9 +72,6 @@ export class AuthService {
             })
 
             return { accessToken, refreshToken };
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     public static async refreshToken(refreshToken: string): Promise<ITokens | undefined> {

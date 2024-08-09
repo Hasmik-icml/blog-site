@@ -13,9 +13,12 @@ export class BadRequestError extends CustomError {
     if (typeof this.errors === 'string') {
       return [{ message: this.errors }];
     } else {
-      return this.errors.map(err => {
-        return { message: err.msg, field: err.type === 'field' ? err.path : undefined };
-      });
+      // return this.errors.map(err => {
+      return [{
+        message: this.errors[0].msg,
+        //  field: this.errors[0].type === 'field' ? this.errors[0].path : undefined 
+      }];
+      // });
     }
   }
 }

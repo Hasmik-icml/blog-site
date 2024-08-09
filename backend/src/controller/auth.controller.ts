@@ -31,7 +31,11 @@ export class AuthController {
             }
         } catch (error) {
             console.log(error)
-            res.status(500).send();
+            if (error instanceof CustomError) {
+                res.status(error.statusCode).send({ errors: error.serializeErrors() });
+            } else {
+                res.status(400).send({ message: 'Something went wrong' });
+            }
         }
     }
 
