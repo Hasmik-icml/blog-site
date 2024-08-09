@@ -50,6 +50,6 @@ router
         validateRequest,
         authMiddleware,
         BlogController.updateBlog)
-    .delete("/:id", BlogController.deleteBlog)
+    .delete("/:id", authMiddleware, BlogController.deleteBlog)
 
 export { router as blogRouter };
