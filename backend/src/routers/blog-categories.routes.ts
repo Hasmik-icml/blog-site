@@ -24,6 +24,6 @@ router
         authMiddleware,
         BlogCategoriesController.updateBlogCategory
     )
-    .delete("/:id", BlogCategoriesController.deleteBlogCategory)
+    .delete("/:id", authMiddleware, BlogCategoriesController.deleteBlogCategory)
 
 export { router as blogCategoryRouter };
