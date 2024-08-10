@@ -30,7 +30,6 @@ export class AuthController {
                 res.status(401).json({ message: 'Invalid email or password' });
             }
         } catch (error) {
-            console.log(error)
             if (error instanceof CustomError) {
                 res.status(error.statusCode).send({ errors: error.serializeErrors() });
             } else {

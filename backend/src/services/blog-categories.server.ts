@@ -1,4 +1,5 @@
-import { Category, PrismaClient } from "@prisma/client";
+import { Category, Prisma, PrismaClient } from "@prisma/client";
+import { NotFoundError } from "../handlers/not-found.handler";
 
 export class BlogCategoryService {
     private static prismaClient = new PrismaClient;
@@ -21,25 +22,37 @@ export class BlogCategoryService {
 
     public static async getById(id: number): Promise<Category> {
         return this.repo.findUniqueOrThrow({
-            where: { id },
+            where: { id, deletedAt: null },
         })
     }
+    
     public static async update(id: number, name?: string): Promise<Category> {
-        return this.repo.update({
-            where: {
-                id
-            },
-            data: { name },
-        });
+        try {
+            const updatedCategory = await this.repo.update({
+                where: {
+                    id,
+                    deletedAt: null,
+                },
+                data: { name },
+            });
+
+            return updatedCategory;
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+                throw new NotFoundError('Category not found');
+            }
+            throw new Error('Error updating Category');
+        }
+
     }
 
     public static async delete(id: number): Promise<Category> {
         const existingCategory = await this.repo.findUnique({
-            where: { id },
+            where: { id, deletedAt: null },
         });
 
         if (!existingCategory) {
-            throw new Error("");
+            throw new NotFoundError("Category not found");
         }
 
         const deletedCategory = await this.repo.update({
