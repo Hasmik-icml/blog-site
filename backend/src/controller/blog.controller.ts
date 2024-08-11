@@ -13,7 +13,11 @@ export class BlogController {
             const newBlog = await BlogService.createBlog(title, content, userId, image, tags, category);
             res.status(200).send(newBlog);
         } catch (error) {
-            res.status(500).json({ error: 'Error creating blog' });
+            if (error instanceof CustomError) {
+                res.status(error.statusCode).send({ errors: error.serializeErrors() });
+            } else {
+                res.status(400).send({ message: 'Something went wrong' });
+            }
         }
     }
 

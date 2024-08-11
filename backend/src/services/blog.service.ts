@@ -1,6 +1,7 @@
 import { Blog, Category, Prisma, PrismaClient } from "@prisma/client";
 import { IBlogFilters } from "../helpers/filters-params.helper";
 import { NotFoundError } from "../handlers/not-found.handler";
+import { BadRequestError } from './../handlers/bad-request.handler';
 
 interface BlogUpdateData {
     title?: string;
@@ -52,8 +53,10 @@ export class BlogService {
             });
             return blog;
         } catch (error) {
-            console.log(error);
-            throw new Error("Someting went wrong");
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+                throw new BadRequestError('Blog already exists');
+            }
+            throw new Error('Error creating blog');
         }
 
     }

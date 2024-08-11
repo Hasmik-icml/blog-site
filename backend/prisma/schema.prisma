@@ -27,7 +27,7 @@ model User {
 
 model Blog {
   id        Int       @id @default(autoincrement())
-  title     String
+  title     String    @unique
   content   String
   authorId  String
   image     String?
@@ -36,13 +36,13 @@ model Blog {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author     User                @relation(fields: [authorId], references: [id])
+  author     User       @relation(fields: [authorId], references: [id])
   categories Category[]
 }
 
 model Category {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique
   deletedAt DateTime?
 
   blogs Blog[]
